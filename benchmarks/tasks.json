@@ -1,0 +1,56 @@
+{
+  "benchmark_name": "Project Memory for Codex Context Benchmark",
+  "memory_files": [
+    "AGENTS.md",
+    "docs/PROJECT_CONTEXT.md",
+    "docs/CURRENT_STATE.md",
+    "docs/ARCHITECTURE.md",
+    "docs/DECISIONS.md",
+    "docs/CHANGELOG.md"
+  ],
+  "large_context_file": "../baselines/large-agents/AGENTS.md",
+  "tasks": [
+    {
+      "id": "locate-entry-point",
+      "title": "Locate the API entry point",
+      "type": "orientation",
+      "selective_files": ["AGENTS.md", "docs/PROJECT_CONTEXT.md", "docs/CURRENT_STATE.md", "docs/ARCHITECTURE.md"],
+      "required_facts": ["src/studyflow/api.py is the HTTP entry point", "Maintain backwards compatibility for the v1 JSON response"]
+    },
+    {
+      "id": "explain-architecture",
+      "title": "Explain the service architecture",
+      "type": "architecture",
+      "selective_files": ["AGENTS.md", "docs/PROJECT_CONTEXT.md", "docs/CURRENT_STATE.md", "docs/ARCHITECTURE.md", "docs/DECISIONS.md"],
+      "required_facts": ["api.py calls `TaskService`", "`TaskService` calls `TaskRepository`", "SQLite is the persistence boundary"]
+    },
+    {
+      "id": "local-change",
+      "title": "Change local title validation",
+      "type": "local-change",
+      "selective_files": ["AGENTS.md", "docs/PROJECT_CONTEXT.md", "docs/CURRENT_STATE.md"],
+      "required_facts": ["Maintain backwards compatibility for the v1 JSON response", "StudyFlow helps students manage study tasks"]
+    },
+    {
+      "id": "cross-module-change",
+      "title": "Add notification retry behavior",
+      "type": "cross-module-change",
+      "selective_files": ["AGENTS.md", "docs/PROJECT_CONTEXT.md", "docs/CURRENT_STATE.md", "docs/ARCHITECTURE.md", "docs/DECISIONS.md"],
+      "required_facts": ["`TaskService` calls `NotificationPort` after a task is completed", "Notifications are triggered in the service layer, not HTTP handlers", "Notification failures are not retried"]
+    },
+    {
+      "id": "resume-work",
+      "title": "Resume unfinished email adapter work",
+      "type": "resume",
+      "selective_files": ["AGENTS.md", "docs/PROJECT_CONTEXT.md", "docs/CURRENT_STATE.md"],
+      "required_facts": ["Email notification adapter is implemented but not wired", "Wire the email adapter through the service composition root"]
+    },
+    {
+      "id": "preserve-constraint",
+      "title": "Preserve the notification boundary",
+      "type": "constraint",
+      "selective_files": ["AGENTS.md", "docs/PROJECT_CONTEXT.md", "docs/CURRENT_STATE.md", "docs/DECISIONS.md"],
+      "required_facts": ["Do not send notifications inside HTTP handlers", "Notifications are triggered in the service layer, not HTTP handlers"]
+    }
+  ]
+}
