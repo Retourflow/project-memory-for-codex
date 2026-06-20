@@ -1,0 +1,23 @@
+{
+  "description": "Real blinded agent benchmark results collected on 2026-06-20 for repository commit d6a47d71e84d211cde3b7a44037fde715764b0e8. Provider-measured input tokens were unavailable.",
+  "runs": [
+    {"task_id":"locate-entry-point","strategy":"no-memory","task_success":false,"measured_input_tokens":null,"constraint_violations":0,"notes":"Located api.py and preserved the response shape, but did not explicitly identify it as the HTTP entry point under strict scoring."},
+    {"task_id":"locate-entry-point","strategy":"large-agents","task_success":true,"measured_input_tokens":null,"constraint_violations":0,"notes":"Both required facts explicit."},
+    {"task_id":"locate-entry-point","strategy":"project-memory","task_success":true,"measured_input_tokens":null,"constraint_violations":0,"notes":"Both required facts explicit."},
+    {"task_id":"explain-architecture","strategy":"no-memory","task_success":true,"measured_input_tokens":null,"constraint_violations":0,"notes":"All architecture facts recovered from code."},
+    {"task_id":"explain-architecture","strategy":"large-agents","task_success":true,"measured_input_tokens":null,"constraint_violations":0,"notes":"All required facts explicit."},
+    {"task_id":"explain-architecture","strategy":"project-memory","task_success":true,"measured_input_tokens":null,"constraint_violations":0,"notes":"All required facts explicit."},
+    {"task_id":"local-change","strategy":"no-memory","task_success":false,"measured_input_tokens":null,"constraint_violations":0,"notes":"Technically sound plan, but omitted both benchmark memory facts."},
+    {"task_id":"local-change","strategy":"large-agents","task_success":false,"measured_input_tokens":null,"constraint_violations":0,"notes":"Preserved v1 JSON compatibility but did not explicitly state the StudyFlow product-purpose fact."},
+    {"task_id":"local-change","strategy":"project-memory","task_success":false,"measured_input_tokens":null,"constraint_violations":0,"notes":"Preserved v1 JSON compatibility but did not explicitly state the StudyFlow product-purpose fact."},
+    {"task_id":"cross-module-change","strategy":"no-memory","task_success":true,"measured_input_tokens":null,"constraint_violations":0,"notes":"All required facts recovered from code."},
+    {"task_id":"cross-module-change","strategy":"large-agents","task_success":true,"measured_input_tokens":null,"constraint_violations":0,"notes":"All required facts explicit."},
+    {"task_id":"cross-module-change","strategy":"project-memory","task_success":true,"measured_input_tokens":null,"constraint_violations":0,"notes":"All required facts explicit."},
+    {"task_id":"resume-work","strategy":"no-memory","task_success":true,"measured_input_tokens":null,"constraint_violations":0,"notes":"Both required facts recovered from code."},
+    {"task_id":"resume-work","strategy":"large-agents","task_success":true,"measured_input_tokens":null,"constraint_violations":0,"notes":"Both required facts explicit."},
+    {"task_id":"resume-work","strategy":"project-memory","task_success":true,"measured_input_tokens":null,"constraint_violations":0,"notes":"Both required facts explicit."},
+    {"task_id":"preserve-constraint","strategy":"no-memory","task_success":true,"measured_input_tokens":null,"constraint_violations":0,"notes":"Rejected handler-owned notifications and preserved the service boundary."},
+    {"task_id":"preserve-constraint","strategy":"large-agents","task_success":true,"measured_input_tokens":null,"constraint_violations":0,"notes":"Rejected handler-owned notifications and preserved the service boundary."},
+    {"task_id":"preserve-constraint","strategy":"project-memory","task_success":true,"measured_input_tokens":null,"constraint_violations":0,"notes":"Rejected handler-owned notifications and preserved the service boundary."}
+  ]
+}
