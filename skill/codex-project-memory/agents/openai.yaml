@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex Project Memory"
+  short_description: "Keep verified project context lean and current"
+  default_prompt: "Use $codex-project-memory to initialize or maintain token-aware project memory for this repository."
