@@ -13,6 +13,8 @@ Last verified: 2026-06-20
 - v0.2 static benchmark with three strategies and six tasks.
 - Optional import format for real agent-run metrics.
 - Deterministic JSON and Markdown benchmark reports.
+- Sanitized evidence from 18 blinded Agent runs across all task/strategy pairs.
+- Real Agent outcomes imported alongside the deterministic static measurements.
 - GitHub Actions workflow for tests, validation, and report reproducibility.
 - Independent-project disclaimer for OpenAI and Codex brand clarity.
 - Security and privacy policy covering local-only operation, sensitive data,
@@ -28,13 +30,14 @@ Last verified: 2026-06-20
 ## Planned Next
 
 1. Publish the verified v0.2 release.
-2. Run a real Codex benchmark and import measured results.
+2. Repeat the Agent benchmark across additional runs and exposed model versions.
 3. Package the initializer and add guided compaction in v0.3.
 
 ## Known Issues
 
-- Real agent benchmark results remain unmeasured.
-- PowerShell initialization has not been executed in this Linux environment.
+- Provider-measured token usage and resolved Agent model versions were not
+  exposed by the benchmark runner.
+- The real Agent benchmark currently has one run per task/strategy pair.
 
 ## Active Entry Points
 
@@ -43,4 +46,6 @@ Last verified: 2026-06-20
 - `scripts/validate.py`: project-memory validator.
 - `benchmarks/run.py`: reproducible benchmark entry point.
 - `benchmarks/results/REPORT.md`: current static evidence.
+- `benchmarks/results/AGENT_BENCHMARK.md`: real Agent benchmark summary.
+- `benchmarks/results/agent-evidence.json`: sanitized evidence index and audit.
 - `SECURITY.md`: security, privacy, and reporting guidance.

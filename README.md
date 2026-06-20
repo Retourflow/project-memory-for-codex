@@ -35,26 +35,29 @@ The toolkit combines:
 - zero-dependency initialization scripts,
 - and a validator that enforces context budgets.
 
-## Static Benchmark Result
+## Agent Benchmark Result
 
-The v0.2 fixture compares six tasks across three strategies:
+The v0.2 evaluation ran six tasks under three strategies, using 18 fresh,
+blinded Agent runs:
 
-| Strategy | Estimated tokens | Required-fact coverage |
-|---|---:|---:|
-| No memory | 0 | 0% |
-| Monolithic `AGENTS.md` | 5,352 | 100% |
-| Selective project memory | 2,921 | 100% |
+| Strategy | Strict task success | Required facts recalled | Estimated context tokens |
+|---|---:|---:|---:|
+| No memory | 4/6 (66.67%) | 11/14 (78.57%) | 0 |
+| Monolithic `AGENTS.md` | 5/6 (83.33%) | 13/14 (92.86%) | 5,352 |
+| Selective project memory | 5/6 (83.33%) | 13/14 (92.86%) | 2,921 |
 
-Across this deterministic fixture, selective project memory used **45.42% fewer
-estimated tokens** than the monolithic context while retaining all declared
-required facts.
+In this benchmark, selective project memory matched the monolithic context's
+strict task success and required-fact recall while using **45.42% fewer
+estimated project-context tokens**.
 
-This is a **static context measurement**, not a model-quality claim. Tokens use
-the transparent approximation `ceil(characters / 4)`. Real task success and
-provider-measured token usage remain `Not measured` until actual agent results
-are imported.
+Tokens use the transparent approximation `ceil(characters / 4)` because the
+runner did not expose provider-measured input usage. Each task/strategy pair
+was run once, so these results are evidence for this fixture, not a statistical
+significance or universal model-quality claim.
 
-See [the complete benchmark report](benchmarks/results/REPORT.md).
+See the [real Agent benchmark report](benchmarks/results/AGENT_BENCHMARK.md),
+[complete sanitized evidence](benchmarks/results/agent-evidence.json), and
+[deterministic static report](benchmarks/results/REPORT.md).
 
 ## Why
 
@@ -171,11 +174,12 @@ To import measured agent outcomes:
 
 ```bash
 python benchmarks/run.py \
-  --agent-results benchmarks/results/my-agent-results.json
+  --agent-results benchmarks/results/agent-results.json
 ```
 
-Use `benchmarks/results/example-agent-results.json` only as a schema example.
-Its values are illustrative and are not benchmark claims.
+The committed `agent-results.json` contains the 18 real blinded runs. Use
+`example-agent-results.json` only as a schema example; its values are
+illustrative and are not benchmark claims.
 
 ## Context Budgets
 
@@ -238,7 +242,8 @@ See [SECURITY.md](SECURITY.md) for reporting and safe-use guidance.
 ## Roadmap
 
 - v0.1: templates, Skill, initialization scripts, and context-budget validation.
-- v0.2: reproducible static benchmark, result-import schema, reports, and CI.
+- v0.2: reproducible static and blinded Agent benchmarks, evidence, reports,
+  result-import schema, and CI.
 - v0.3: package the initializer and add guided compaction.
 
 ## Contributing
