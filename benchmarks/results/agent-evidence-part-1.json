@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "part": 1,
+  "run_count": 6,
+  "raw_prompts": {
+    "locate-entry-point__no-memory": "You are one isolated run in a blinded benchmark. Read-only task. You may inspect ONLY files under <benchmark-temp>\\case-a7. Do not inspect parent/sibling directories, network resources, or prior knowledge. Do not modify files.\n\nTask: Locate the API entry point. Identify the HTTP/API entry-point file and state the compatibility constraint that matters if it is changed.\n\nReturn concise JSON only with keys: answer, evidence_files, constraint_violations. Explicitly state facts you can support; do not invent missing project policy.",
+    "locate-entry-point__large-agents": "You are one isolated run in a blinded benchmark. Read-only task. You may inspect ONLY files under <benchmark-temp>\\case-k2. Do not inspect parent/sibling directories, network resources, or prior knowledge. Do not modify files.\n\nTask: Locate the API entry point. Identify the HTTP/API entry-point file and state the compatibility constraint that matters if it is changed.\n\nReturn concise JSON only with keys: answer, evidence_files, constraint_violations. Explicitly state facts you can support; do not invent missing project policy.",
+    "locate-entry-point__project-memory": "You are one isolated run in a blinded benchmark. Read-only task. You may inspect ONLY files under <benchmark-temp>\\case-r9. Do not inspect parent/sibling directories, network resources, or prior knowledge. Do not modify files.\n\nTask: Locate the API entry point. Identify the HTTP/API entry-point file and state the compatibility constraint that matters if it is changed.\n\nReturn concise JSON only with keys: answer, evidence_files, constraint_violations. Explicitly state facts you can support; do not invent missing project policy.",
+    "explain-architecture__no-memory": "You are one isolated run in a blinded benchmark. Read-only task. You may inspect ONLY files under <benchmark-temp>\\case-b4. Do not inspect parent/sibling directories, network resources, or prior knowledge. Do not modify files.\n\nTask: Explain the service architecture. Describe the call chain from API through service and repository, and identify the persistence boundary.\n\nReturn concise JSON only with keys: answer, evidence_files, constraint_violations. Explicitly state facts you can support; do not invent missing project policy.",
+    "explain-architecture__large-agents": "You are one isolated run in a blinded benchmark. Read-only task. You may inspect ONLY files under <benchmark-temp>\\case-m8. Do not inspect parent/sibling directories, network resources, or prior knowledge. Do not modify files.\n\nTask: Explain the service architecture. Describe the call chain from API through service and repository, and identify the persistence boundary.\n\nReturn concise JSON only with keys: answer, evidence_files, constraint_violations. Explicitly state facts you can support; do not invent missing project policy.",
+    "explain-architecture__project-memory": "You are one isolated run in a blinded benchmark. Read-only task. You may inspect ONLY files under <benchmark-temp>\\case-t1. Do not inspect parent/sibling directories, network resources, or prior knowledge. Do not modify files.\n\nTask: Explain the service architecture. Describe the call chain from API through service and repository, and identify the persistence boundary.\n\nReturn concise JSON only with keys: answer, evidence_files, constraint_violations. Explicitly state facts you can support; do not invent missing project policy."
+  },
+  "runs": [
+    {
+      "run_id": "locate-entry-point__no-memory",
+      "task_id": "locate-entry-point",
+      "strategy": "no-memory",
+      "blinded_case": "case-a7",
+      "agent": {"id": "agent-run-01"},
+      "required_facts": ["src/studyflow/api.py is the HTTP entry point", "Maintain backwards compatibility for the v1 JSON response"],
+      "raw_output": {
+        "answer": {"entry_point": "src/studyflow/api.py: complete_task(service, task_id)", "constraint": "Preserve its signature and response shape: {\"id\", \"title\", \"completed\"}. No explicit HTTP framework/router is present."},
+        "evidence_files": ["src/studyflow/api.py", "src/studyflow/service.py"],
+        "constraint_violations": []
+      },
+      "score": {"task_success": false, "matched_facts": ["Maintain backwards compatibility for the v1 JSON response"], "missing_facts": ["src/studyflow/api.py is explicitly identified as the HTTP entry point"], "constraint_violations": 0, "reason": "The file and function were located, but the answer did not explicitly establish the file's HTTP-entry-point role."}
+    },
+    {
+      "run_id": "locate-entry-point__large-agents",
+      "task_id": "locate-entry-point",
+      "strategy": "large-agents",
+      "blinded_case": "case-k2",
+      "agent": {"id": "agent-run-02"},
+      "required_facts": ["src/studyflow/api.py is the HTTP entry point", "Maintain backwards compatibility for the v1 JSON response"],
+      "raw_output": {"answer": "HTTP/API entry point: src/studyflow/api.py. Compatibility constraint: preserve the v1 JSON response fields `id`, `title`, and `completed`.", "evidence_files": ["AGENTS.md", "src/studyflow/api.py"], "constraint_violations": []},
+      "score": {"task_success": true, "matched_facts": ["src/studyflow/api.py is the HTTP entry point", "Maintain backwards compatibility for the v1 JSON response"], "missing_facts": [], "constraint_violations": 0, "reason": "Both required facts were explicit."}
+    },
+    {
+      "run_id": "locate-entry-point__project-memory",
+      "task_id": "locate-entry-point",
+      "strategy": "project-memory",
+      "blinded_case": "case-r9",
+      "agent": {"id": "agent-run-03"},
+      "required_facts": ["src/studyflow/api.py is the HTTP entry point", "Maintain backwards compatibility for the v1 JSON response"],
+      "raw_output": {"answer": {"entry_point": "src/studyflow/api.py", "compatibility_constraint": "Preserve backward compatibility of the v1 JSON response fields: id, title, and completed."}, "evidence_files": ["AGENTS.md", "docs/ARCHITECTURE.md", "docs/PROJECT_CONTEXT.md", "src/studyflow/api.py"], "constraint_violations": []},
+      "score": {"task_success": true, "matched_facts": ["src/studyflow/api.py is the HTTP entry point", "Maintain backwards compatibility for the v1 JSON response"], "missing_facts": [], "constraint_violations": 0, "reason": "Both required facts were explicit."}
+    },
+    {
+      "run_id": "explain-architecture__no-memory",
+      "task_id": "explain-architecture",
+      "strategy": "no-memory",
+      "blinded_case": "case-b4",
+      "agent": {"id": "agent-run-04"},
+      "required_facts": ["api.py calls TaskService", "TaskService calls TaskRepository", "SQLite is the persistence boundary"],
+      "raw_output": {"answer": {"architecture": "Layered design: API adapter -> TaskService -> TaskRepository port -> SqliteTaskRepository. Task is the domain model; notifications use a separate NotificationPort.", "call_chain": "api.complete_task calls TaskService.complete_task, which calls repository.complete. The SQLite repository updates and commits the task, reloads it, and returns a Task. The service then calls notifications.task_completed and returns the Task; the API serializes it to a dictionary.", "persistence_boundary": "TaskRepository is the abstraction boundary. SqliteTaskRepository owns SQL, schema creation, and commits. Persistence completes before notification dispatch.", "unsupported": "No HTTP framework, application composition root, or project-policy documentation is present in the inspected files; none is inferred."}, "evidence_files": ["src/studyflow/api.py", "src/studyflow/service.py", "src/studyflow/repository.py", "src/studyflow/models.py", "src/studyflow/notifications.py", "tests/test_service.py"], "constraint_violations": []},
+      "score": {"task_success": true, "matched_facts": ["api.py calls TaskService", "TaskService calls TaskRepository", "SQLite is the persistence boundary"], "missing_facts": [], "constraint_violations": 0, "reason": "All architectural relationships were recovered from code."}
+    },
+    {
+      "run_id": "explain-architecture__large-agents",
+      "task_id": "explain-architecture",
+      "strategy": "large-agents",
+      "blinded_case": "case-m8",
+      "agent": {"id": "agent-run-05"},
+      "required_facts": ["api.py calls TaskService", "TaskService calls TaskRepository", "SQLite is the persistence boundary"],
+      "raw_output": {"answer": "Architecture: api.py is the transport layer, TaskService holds application rules, and TaskRepository is the persistence abstraction implemented by SqliteTaskRepository. Completion call chain: API complete_task(service, task_id) → TaskService.complete_task() → TaskRepository.complete() → SQLite UPDATE and commit → row reload as Task → NotificationPort.task_completed() → API serializes id, title, and completed. Creation and listing similarly flow from TaskService to repository.add() and repository.list_all(). The persistence boundary is SqliteTaskRepository/SQLite: it owns schema creation, SQL, and commits; the service depends only on TaskRepository. The test confirms completed state is persisted before notification is observed.", "evidence_files": ["AGENTS.md", "src/studyflow/api.py", "src/studyflow/service.py", "src/studyflow/repository.py", "src/studyflow/models.py", "src/studyflow/notifications.py", "tests/test_service.py"], "constraint_violations": []},
+      "score": {"task_success": true, "matched_facts": ["api.py calls TaskService", "TaskService calls TaskRepository", "SQLite is the persistence boundary"], "missing_facts": [], "constraint_violations": 0, "reason": "All architectural relationships were explicit."}
+    },
+    {
+      "run_id": "explain-architecture__project-memory",
+      "task_id": "explain-architecture",
+      "strategy": "project-memory",
+      "blinded_case": "case-t1",
+      "agent": {"id": "agent-run-06"},
+      "required_facts": ["api.py calls TaskService", "TaskService calls TaskRepository", "SQLite is the persistence boundary"],
+      "raw_output": {"answer": {"architecture": "Layered Python service: API adapter → TaskService → TaskRepository → SQLite.", "call_chain": "api.complete_task calls TaskService.complete_task, which calls repository.complete. SqliteTaskRepository updates and commits SQLite, reloads the Task, then returns it. The service invokes NotificationPort.task_completed only after persistence succeeds, and the API serializes the Task as id/title/completed.", "persistence_boundary": "SQLite access and transaction commits are encapsulated by SqliteTaskRepository behind the TaskRepository protocol. The service contains no SQL."}, "evidence_files": ["src/studyflow/api.py", "src/studyflow/service.py", "src/studyflow/repository.py", "src/studyflow/notifications.py", "docs/ARCHITECTURE.md", "docs/DECISIONS.md", "tests/test_service.py"], "constraint_violations": []},
+      "score": {"task_success": true, "matched_facts": ["api.py calls TaskService", "TaskService calls TaskRepository", "SQLite is the persistence boundary"], "missing_facts": [], "constraint_violations": 0, "reason": "All architectural relationships were explicit."}
+    }
+  ]
+}
