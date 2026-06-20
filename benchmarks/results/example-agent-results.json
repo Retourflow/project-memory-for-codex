@@ -1,0 +1,13 @@
+{
+  "description": "Schema example only. Values are illustrative and are not project benchmark claims.",
+  "runs": [
+    {
+      "task_id": "resume-work",
+      "strategy": "project-memory",
+      "task_success": true,
+      "measured_input_tokens": 321,
+      "constraint_violations": 0,
+      "notes": "Example format only; replace with a real measured run."
+    }
+  ]
+}
