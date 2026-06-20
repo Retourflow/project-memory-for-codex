@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "benchmark": {
+    "name": "Project Memory for Codex Context Benchmark",
+    "repository": "https://github.com/Retourflow/project-memory-for-codex",
+    "commit": "d6a47d71e84d211cde3b7a44037fde715764b0e8",
+    "date": "2026-06-20",
+    "runs": 18,
+    "tasks": 6,
+    "strategies": [
+      "no-memory",
+      "large-agents",
+      "project-memory"
+    ],
+    "model_override": null,
+    "measured_input_tokens_available": false
+  },
+  "methodology": {
+    "isolation": "Each run used a fresh agent and a blinded case directory. Agents were instructed to inspect only that directory, avoid network access, and make no file changes.",
+    "scoring": "A run passes only when every required fact is explicitly or unambiguously present in the answer.",
+    "raw_output_format": "Agent output content is preserved below as parsed JSON. Whitespace formatting is normalized.",
+    "constraint_violations": "Final constraint_violations counts violations committed by the answering agent, not violations found in a teammate proposal."
+  },
+  "runner_configuration": {
+    "primary_runs": {
+      "runner": "multi_agent_v1.spawn_agent",
+      "agent_type": "explorer",
+      "fork_context": false,
+      "model_requested": null,
+      "resolved_model": null,
+      "model_status": "No model override was supplied. The agents inherited the parent thread's configured model, but the runner response did not expose the resolved model identifier or version.",
+      "reasoning_effort_requested": null,
+      "service_tier_requested": null,
+      "parallelism": "Six agents per batch, three batches",
+      "tool_enforced_read_only": false,
+      "read_only_policy": "Read-only, directory isolation, no-network, and no-modification requirements were stated in each prompt. The runner did not provide separate enforcement or network telemetry.",
+      "response_contract": "Concise JSON with answer, evidence_files, and constraint_violations."
+    },
+    "grading_runs": {
+      "runner": "multi_agent_v1.spawn_agent",
+      "agent_type": "default",
+      "fork_context": false,
+      "model_requested": null,
+      "resolved_model": null,
+      "model_status": "No model override was supplied. The resolved inherited model identifier or version was not exposed by the runner.",
+      "reasoning_effort_requested": null,
+      "service_tier_requested": null,
+      "primary_judges": 3,
+      "consistency_arbiters": 1
+    },
+    "runtime_limitations": [
+      "Provider-measured input and output token counts were not returned.",
+      "The resolved Agent model/version was not returned.",
+      "Per-run temperature, seed, sampling parameters, and system-prompt revision were not returned.",
+      "Network and filesystem compliance were instructed but were not independently attested by runner telemetry."
+    ]
+  },
+  "summary": {
+    "no-memory": {
+      "passed": 4,
+      "total": 6,
+      "task_success_rate_percent": 66.67,
+      "matched_required_facts": 11,
+      "required_facts": 14,
+      "required_fact_recall_percent": 78.57,
+      "estimated_context_tokens": 0
+    },
+    "large-agents": {
+      "passed": 5,
+      "total": 6,
+      "task_success_rate_percent": 83.33,
+      "matched_required_facts": 13,
+      "required_facts": 14,
+      "required_fact_recall_percent": 92.86,
+      "estimated_context_tokens": 5352
+    },
+    "project-memory": {
+      "passed": 5,
+      "total": 6,
+      "task_success_rate_percent": 83.33,
+      "matched_required_facts": 13,
+      "required_facts": 14,
+      "required_fact_recall_percent": 92.86,
+      "estimated_context_tokens": 2921
+    }
+  },
+  "grading_audit": {
+    "primary_judges": [
+      {
+        "strategy": "no-memory",
+        "agent_id": "judge-01",
+        "initial_passes": 4
+      },
+      {
+        "strategy": "large-agents",
+        "agent_id": "judge-02",
+        "initial_passes": 6
+      },
+      {
+        "strategy": "project-memory",
+        "agent_id": "judge-03",
+        "initial_passes": 5
+      }
+    ],
+    "disputed_item": {
+      "task_id": "local-change",
+      "strategies": [
+        "large-agents",
+        "project-memory"
+      ],
+      "issue": "The primary judges applied inconsistent standards to nearly equivalent wording about study tasks.",
+      "arbiter": {
+        "agent_id": "arbiter-01",
+        "ruling": "Both answers match the v1 compatibility fact but miss the explicit statement that StudyFlow helps students manage study tasks; both fail under the strict all-facts rule."
+      }
+    },
+    "final_passes": {
+      "no-memory": 4,
+      "large-agents": 5,
+      "project-memory": 5
+    }
+  },
+  "evidence_parts": [
+    {
+      "file": "agent-evidence-part-1.json",
+      "runs": [
+        "locate-entry-point__no-memory",
+        "locate-entry-point__large-agents",
+        "locate-entry-point__project-memory",
+        "explain-architecture__no-memory",
+        "explain-architecture__large-agents",
+        "explain-architecture__project-memory"
+      ]
+    },
+    {
+      "file": "agent-evidence-part-2.json",
+      "runs": [
+        "local-change__no-memory",
+        "local-change__large-agents",
+        "local-change__project-memory",
+        "cross-module-change__no-memory",
+        "cross-module-change__large-agents",
+        "cross-module-change__project-memory"
+      ]
+    },
+    {
+      "file": "agent-evidence-part-3.json",
+      "runs": [
+        "resume-work__no-memory",
+        "resume-work__large-agents",
+        "resume-work__project-memory",
+        "preserve-constraint__no-memory",
+        "preserve-constraint__large-agents",
+        "preserve-constraint__project-memory"
+      ]
+    }
+  ]
+}
