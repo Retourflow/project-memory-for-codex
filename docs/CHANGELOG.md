@@ -12,12 +12,18 @@
   preservation, plus manifest integrity and expected-red grader unit tests.
 - Deterministic condition-specific workspace preparation, including baseline
   memory isolation and v0.2 Skill installation for the experimental condition.
+- Fresh-process external agent CLI runner with hidden offline grader results,
+  per-session raw stdout/stderr, and Git snapshots.
+- Source-evidence memory review packets and regression tests for smoke runs.
+- Corrected continuation prompt to avoid explicitly revealing unfinished API work.
 - ADR-003 documenting why evaluation precedes new features.
 
 ### Verification status
 
 - Experimental planning artifacts only; live-agent comparison **not run**.
 - No v0.3 success-rate or real token-reduction claims.
+- GitHub Actions executes unit and smoke/red-test checks; no live coding-agent
+  comparison has run.
 
 ## v0.2
 
