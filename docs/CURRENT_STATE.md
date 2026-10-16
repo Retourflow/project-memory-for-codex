@@ -28,14 +28,15 @@ Last reviewed: 2026-10-17 (v0.3 experiment branch; live-agent evaluation not run
 - Experimental v0.3 branch defines a narrowly scoped reliable-handoff design
   (`design.md`), a cross-session evaluation protocol and pilot scenario
   (`benchmarks/cross_session/`), offline stage-aware behavior grader, and
-  manifest structure tests. Agent outcome measurements are **not yet run**.
+  manifest structure tests, and a reproducible condition-specific workspace
+  preparer. The grader has a regression test expecting failure on the pristine
+  fixture. Agent outcome measurements are **not yet run**.
 
 ## Planned Next
 
-1. Validate benchmark resources with local unit tests and confirm the hidden
-   grader fails as expected on an unmodified fixture.
-2. Build reproducible per-condition isolated workspaces and a fresh-session
-   orchestration harness; do not leak evaluator tests to agents.
+1. Confirm GitHub CI executes manifest/workspace/grader red tests successfully.
+2. Build a fresh-session agent orchestration harness and independent memory
+   accuracy evaluator; do not leak evaluator tests to agents.
 3. Run repeated live-agent cross-session trials for all four conditions;
    preserve raw evidence, measured usage if exposed, and failures.
 4. Choose the smallest Skill improvement justified by repeated failures.
