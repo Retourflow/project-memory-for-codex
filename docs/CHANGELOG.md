@@ -9,7 +9,9 @@
 - Cross-session benchmark protocol, four comparison conditions, and three
   ordered StudyFlow coding-session tasks.
 - Offline stage-aware behavior checks for task-title changes and API contract
-  preservation, plus manifest integrity unit tests.
+  preservation, plus manifest integrity and expected-red grader unit tests.
+- Deterministic condition-specific workspace preparation, including baseline
+  memory isolation and v0.2 Skill installation for the experimental condition.
 - ADR-003 documenting why evaluation precedes new features.
 
 ### Verification status
