@@ -55,7 +55,21 @@ variable. Record exactly which files and setup messages each condition receives.
 1. Pin repository commit, runtime, chosen agent/model version, prompt,
    allowed tools, and any limits **before** beginning.
 2. Create an isolated workspace for each condition/trial from the same base
-   fixture. Normalize the initial memory documents for the condition.
+   fixture using `prepare.py`, which strips specialized memory from the
+   controls and installs the Skill into the experimental workspace:
+
+   ```bash
+   python benchmarks/cross_session/prepare.py \\
+     --condition project-memory --workspace /tmp/studyflow-pm-trial1
+   python benchmarks/cross_session/prepare.py \\
+     --condition concise-agents --workspace /tmp/studyflow-agents-trial1
+   ```
+
+   The command refuses to overwrite an existing workspace and initializes a
+   new Git repository by default. Use new paths for each independent trial.
+   The tool only prepares files; it does not start a model or grade results.
+   When running Codex, confirm that the installed Skill is actually activated
+   in the project-memory condition; its presence alone does not prove use.
 3. Launch a **fresh agent process/session** for session 1 with only the
    corresponding session user task from `scenarios.json`. Do not provide
    `grader/`, future-session prompts, or grading rubrics to the agent.
