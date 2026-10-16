@@ -42,9 +42,9 @@ class TitleEditContractTests(unittest.TestCase):
     def tearDown(self) -> None:
         self.connection.close()
 
-    def test_repository_rename_persists_trimmed_title(self) -> None:
+    def test_repository_rename_persists_title(self) -> None:
         task = self.service.create_task("First")
-        renamed = self.repo.rename(task.id, "  Updated title  ")
+        renamed = self.repo.rename(task.id, "Updated title")
         self.assertEqual(renamed.title, "Updated title")
         self.assertEqual(renamed.id, task.id)
         self.assertFalse(renamed.completed)
@@ -55,6 +55,8 @@ class TitleEditContractTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.service.rename_task(task.id, " \t ")
         self.assertEqual(self.repo.list_all()[0].title, "Original")
+        updated = self.service.rename_task(task.id, "  Trimmed  ")
+        self.assertEqual(updated.title, "Trimmed")
 
     def test_missing_task_is_not_silently_created(self) -> None:
         with self.assertRaises(KeyError):
