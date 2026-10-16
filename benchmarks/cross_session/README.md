@@ -145,7 +145,10 @@ Outputs are written **outside** the agent workspace under
 \`<trial-dir>/sessionN/\`: \`record.json\`, \`agent_stdout.txt\`,
 \`agent_stderr.txt\`, \`grader_stdout.txt\`, \`grader_stderr.txt\`,
 \`git_before.txt\`, \`git_after.txt\`, and \`memory_evidence.json\`.
-The agent receives no grader code or grader results. After each session,
+The agent receives no grader code or grader results. The runner flags
+unexpected Markdown artifacts in baseline workspaces for manual contamination
+review, because an agent might spontaneously create a memory file. These flags
+are not automatic failure verdicts. After each session,
 \`memory_evidence.json\` lists source-level observations and candidate stale
 claims; it is **not** an automated verdict. Human reviewers must compare
 these against actual source, test runs, transcripts and handoff documents.
