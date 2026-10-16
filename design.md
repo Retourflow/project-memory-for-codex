@@ -94,9 +94,12 @@ materially degrading correctness, simplicity, or maintenance cost.
 
 - [x] Audit v0.2 against the narrow promise.
 - [x] Define a cross-session benchmark protocol and pilot scenario.
-- [ ] Implement isolated fixture resets and a runnable benchmark harness.
-- [ ] Implement independent code/test-based grading and transcript capture.
-- [ ] Run real agents across all baselines, repeat trials, publish raw evidence.
+- [x] Implement condition-isolated fixture preparation and a generic external
+  CLI runner with separate fresh processes per session (harness smoke-tested).
+- [x] Implement independent code-behavior grading, transcript capture, and
+  an evidence packet for human memory-truth audit (not an automated verdict).
+- [ ] Run real agents across all baselines, repeat trials, audit memory truth,
+  and publish sanitized raw evidence with verified usage metrics.
 - [ ] Decide whether the Skill needs changes based on those findings.
 
 **Stop condition:** do not claim v0.3 superiority, real token savings, or
