@@ -71,6 +71,23 @@ def git_snapshot(path: Path) -> dict[str, str | None]:
     }
 
 
+def memory_artifact_warnings(workspace: Path, condition: str) -> list[str]:
+    """Flag extra Markdown memory artifacts for baseline contamination review."""
+    if condition == "project-memory":
+        return []
+    allowed = {"AGENTS.md"}
+    if condition == "plain-summary":
+        allowed.add("HANDOFF.md")
+    found = sorted(
+        str(p.relative_to(workspace))
+        for p in workspace.rglob("*.md")
+        if ".git" not in p.relative_to(workspace).parts
+        and ".agents" not in p.relative_to(workspace).parts
+        and str(p.relative_to(workspace)) not in allowed
+    )
+    return found
+
+
 def sha256(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
@@ -192,6 +209,8 @@ def run_session(workspace: Path, trial_dir: Path, condition: str,
         "memory_review_status": "not_reviewed",
         "memory_evidence_file": "memory_evidence.json",
         "potential_stale_api_claims": len(audit_packet["potential_stale_api_claims"]),
+        "unexpected_markdown_artifacts": memory_artifact_warnings(workspace, condition),
+        "baseline_contamination_review_required": bool(memory_artifact_warnings(workspace, condition)),
         "actual_provider_input_tokens": None,
         "actual_provider_output_tokens": None,
         "tool_calls": None,
