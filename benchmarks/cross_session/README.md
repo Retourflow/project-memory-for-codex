@@ -50,7 +50,7 @@ same user task for each session, and the same available tool permissions.
 The memory mechanism, not special hints about task outcomes, is the independent
 variable. Record exactly which files and setup messages each condition receives.
 
-## Session protocol (manual orchestration until harness exists)
+## Session protocol (external CLI runner available; trials not yet run)
 
 1. Pin repository commit, runtime, chosen agent/model version, prompt,
    allowed tools, and any limits **before** beginning.
@@ -71,8 +71,12 @@ variable. Record exactly which files and setup messages each condition receives.
    When running Codex, confirm that the installed Skill is actually activated
    in the project-memory condition; its presence alone does not prove use.
 3. Launch a **fresh agent process/session** for session 1 with only the
-   corresponding session user task from `scenarios.json`. Do not provide
-   `grader/`, future-session prompts, or grading rubrics to the agent.
+   corresponding session user task from `scenarios.json`. Use the Python runner
+   below; it reads the task from the manifest, sends it via stdin to the agent
+   process, records stdout/stderr, and evaluates code outside the workspace.
+   Do not provide `grader/`, future-session prompts, or grading rubrics to the
+   agent. The process command must be configured for **new sessions**, not
+   resuming prior conversation state.
 4. Preserve committed and uncommitted project files and Git history for the
    *next session in that trial*; carry **no conversational context**.
 5. Outside the agent's workspace, run public fixture tests and the stage
@@ -94,6 +98,63 @@ containing the grader, where WORKDIR is the isolated target checkout:
 PYTHONPATH="$WORKDIR/src" BENCHMARK_SESSION=session1 \
   python -m unittest discover -s benchmarks/cross_session/grader -p 'test_*.py' -v
 ```
+
+### CLI runner and review packet
+
+The benchmark uses a **generic command adapter**. The specified executable
+must read the task from stdin, exit after one agent session, and run in the
+provided workspace. Confirm your local tool's sandbox/permission settings and
+new-session semantics before real trials. There is **no bundled Codex runtime**
+and no default live-agent evaluation.
+
+Example: first prepare four workspaces in temporary directories. Then run
+each of the three stages using **the same command, model, permissions and
+timeout** for each condition. For a Codex CLI installation that supports
+stdin via the trailing \`-\` argument, a command can be expressed as:
+
+\`\`\`bash
+python -m benchmarks.cross_session.run_session \
+  --workspace /tmp/studyflow-pm-trial1 \
+  --trial-dir /tmp/studyflow-pm-results1 \
+  --condition project-memory \
+  --stage session1 \
+  --agent-command-json '["codex","exec","-"]'
+\`\`\`
+
+Execute \`session2\` and \`session3\` with the exact same workspace and
+trial directory, changing only \`--stage\`, **each from a fresh process**.
+Do not enable conversation resume, bypass sandbox boundaries, or grant broader
+tool permissions to one experimental condition. If your CLI does not support
+standard input, use a small wrapper with the same contract.
+
+Before evaluating model behavior, test harness wiring without any real agent:
+
+\`\`\`bash
+python -m benchmarks.cross_session.run_session \
+  --workspace /tmp/studyflow-no-memory-smoke \
+  --trial-dir /tmp/studyflow-smoke-records \
+  --condition no-memory --stage session1 --smoke \
+  --agent-command-json '["python","-c","import sys;sys.stdin.read()"]'
+\`\`\`
+
+Prepare that smoke workspace with \`prepare.py\` first. Smoke mode is always
+labeled **unmeasured** and intentionally fails the feature grader against
+an unchanged fixture. Do not use it as evidence of model performance.
+
+Outputs are written **outside** the agent workspace under
+\`<trial-dir>/sessionN/\`: \`record.json\`, \`agent_stdout.txt\`,
+\`agent_stderr.txt\`, \`grader_stdout.txt\`, \`grader_stderr.txt\`,
+\`git_before.txt\`, \`git_after.txt\`, and \`memory_evidence.json\`.
+The agent receives no grader code or grader results. After each session,
+\`memory_evidence.json\` lists source-level observations and candidate stale
+claims; it is **not** an automated verdict. Human reviewers must compare
+these against actual source, test runs, transcripts and handoff documents.
+
+Even in the declared live mode, \`record.json\` keeps \`public_comparison_ready\`
+false and real token metrics null. A successful grader is only a code-behavior
+result. Verify CLI/model versions and provenance of any provider token usage
+before publishing aggregated measurements. Keep raw transcripts and workspace
+paths private or carefully sanitize before publishing.
 
 `BENCHMARK_SESSION` accepts `session1`, `session2`, or `session3`.
 This evaluator tests **code behavior**. It is not an agent runner and does not
