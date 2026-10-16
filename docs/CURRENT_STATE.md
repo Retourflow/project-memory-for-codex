@@ -25,31 +25,33 @@ Last reviewed: 2026-10-17 (v0.3 experiment branch; live-agent evaluation not run
 
 ## In Progress
 
-- Experimental v0.3 branch defines a narrowly scoped reliable-handoff design
-  (`design.md`), a cross-session evaluation protocol and pilot scenario
-  (`benchmarks/cross_session/`), offline stage-aware behavior grader, and
-  manifest structure tests, and a reproducible condition-specific workspace
-  preparer. The grader has a regression test expecting failure on the pristine
-  fixture. Agent outcome measurements are **not yet run**.
+- The v0.3 experimental branch now contains a scoped `design.md`, four
+  isolated condition-specific workspace setups, a three-session StudyFlow
+  coding scenario, a generic fresh-process external agent CLI runner,
+  stage-aware independent behavioral grading, and a source-evidence packet
+  for human memory review. Tests cover manifest structure, isolated workspace
+  setup, smoke runner behavior, source inspection, and the expected-red grader.
+- The runner never reports a model success rate from its own smoke tests;
+  records mark provider token usage unknown and memory truth not reviewed.
 
 ## Planned Next
 
-1. Confirm GitHub CI executes manifest/workspace/grader red tests successfully.
-2. Build a fresh-session agent orchestration harness and independent memory
-   accuracy evaluator; do not leak evaluator tests to agents.
-3. Run repeated live-agent cross-session trials for all four conditions;
-   preserve raw evidence, measured usage if exposed, and failures.
-4. Choose the smallest Skill improvement justified by repeated failures.
-5. Release v0.3 only after verifying the new workflow; handle packaging and
-   guided compaction later if needed.
+1. Pin agent CLI/model version and sandbox permissions and run a small pilot
+   with all four conditions in genuinely fresh coding-agent sessions.
+2. Independently review memory claims against code, behavior tests, and
+   transcripts; verify which provider usage metrics are exposed.
+3. Repeat trials, preserve and sanitize raw evidence, and publish uncertainty.
+4. Fix the smallest repeatable handoff failure, if the evidence warrants it.
+5. Release v0.3 only after demonstrated improvements or clear negative results.
 
 ## Known Issues
 
 - Provider-measured token usage and resolved Agent model versions were not
   exposed by the benchmark runner.
 - The real Agent benchmark currently has one run per task/strategy pair.
-- v0.3's pilot benchmark is a protocol and offline behavior grader only;
-  no live-agent results, token savings, or comparison outcomes exist yet.
+- v0.3 has an unrun live-agent scenario with a CLI harness, smoke tests,
+  and an evidence packet; no comparable live-agent trial results, token
+  savings, or memory-accuracy scores exist yet.
 
 ## Active Entry Points
 
@@ -57,6 +59,9 @@ Last reviewed: 2026-10-17 (v0.3 experiment branch; live-agent evaluation not run
 - `benchmarks/cross_session/README.md`: evaluation protocol and limitations.
 - `benchmarks/cross_session/scenarios.json`: three-session pilot manifest.
 - `benchmarks/cross_session/grader/test_title_edit.py`: independent behavior checks.
+- `benchmarks/cross_session/prepare.py`: fair per-condition workspaces.
+- `benchmarks/cross_session/run_session.py`: fresh-session CLI and offline tests.
+- `benchmarks/cross_session/audit_memory.py`: human-review evidence packets.
 
 - `skill/codex-project-memory/SKILL.md`: reusable workflow.
 - `templates/AGENTS.md`: repository instruction template.
