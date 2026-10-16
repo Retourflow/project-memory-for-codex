@@ -15,6 +15,7 @@
 - Fresh-process external agent CLI runner with hidden offline grader results,
   per-session raw stdout/stderr, and Git snapshots.
 - Source-evidence memory review packets and regression tests for smoke runs.
+- Baseline contamination hints for unexpected project-memory Markdown files.
 - Corrected continuation prompt to avoid explicitly revealing unfinished API work.
 - ADR-003 documenting why evaluation precedes new features.
 
