@@ -1,5 +1,22 @@
 # Changelog
 
+## Unreleased — v0.3 experiment preparation
+
+### Added
+
+- Root `design.md` defining minimal, reliable cross-session project handoff
+  as the narrow product promise and restricting unrelated feature growth.
+- Cross-session benchmark protocol, four comparison conditions, and three
+  ordered StudyFlow coding-session tasks.
+- Offline stage-aware behavior checks for task-title changes and API contract
+  preservation, plus manifest integrity unit tests.
+- ADR-003 documenting why evaluation precedes new features.
+
+### Verification status
+
+- Experimental planning artifacts only; live-agent comparison **not run**.
+- No v0.3 success-rate or real token-reduction claims.
+
 ## v0.2
 
 Released: 2026-06-20
