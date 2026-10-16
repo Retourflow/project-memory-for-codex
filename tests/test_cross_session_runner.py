@@ -10,7 +10,7 @@ from pathlib import Path
 
 from benchmarks.cross_session.prepare import prepare_workspace
 from benchmarks.cross_session.run_session import (
-    checked_command, run_session, sha256, git_snapshot,
+    checked_command, run_session, sha256, git_snapshot, memory_artifact_warnings,
 )
 
 
@@ -92,6 +92,21 @@ class CrossSessionRunnerTests(unittest.TestCase):
                     workspace, workspace / "records", "no-memory", "session1",
                     [sys.executable, "-c", "print('unused')"], smoke=True,
                 )
+
+    def test_baseline_contamination_review_flags_extra_markdown(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = Path(temp) / "agent_workspace"
+            prepare_workspace(workspace, "no-memory", initialize_git=False)
+            self.assertEqual(memory_artifact_warnings(workspace, "no-memory"), [])
+            (workspace / "HANDOFF.md").write_text(
+                "Created by an agent", encoding="utf-8"
+            )
+            self.assertEqual(
+                memory_artifact_warnings(workspace, "no-memory"), ["HANDOFF.md"]
+            )
+            self.assertEqual(
+                memory_artifact_warnings(workspace, "plain-summary"), []
+            )
 
     def test_git_snapshot_and_sha_are_deterministic(self) -> None:
         self.assertEqual(sha256("a"), sha256("a"))
