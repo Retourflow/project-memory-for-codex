@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "studyflow-title-edit-handoff-pilot",
+  "status": "unrun",
+  "base_fixture": "benchmarks/fixture-project",
+  "description": "A real three-session repository modification with deliberately unfinished work, new-agent continuation and post-handoff reconciliation.",
+  "conditions": [
+    {
+      "id": "no-memory",
+      "mechanism": "code-and-git-only"
+    },
+    {
+      "id": "concise-agents",
+      "mechanism": "single-concise-agents-md"
+    },
+    {
+      "id": "plain-summary",
+      "mechanism": "one-generic-handoff-md"
+    },
+    {
+      "id": "project-memory",
+      "mechanism": "v0.2-project-memory-skill"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "session1",
+      "task": "Start the task-title editing feature in StudyFlow. Implement `SqliteTaskRepository.rename(task_id, new_title)` and `TaskService.rename_task(task_id, new_title)`. Apply the same trim-and-reject-empty behavior used by create_task, preserve the existing completed state, and raise KeyError for an unknown id. Add appropriate tests and run them. Intentionally DO NOT expose title editing in `src/studyflow/api.py` yet: the API is reserved for the next session. At wrap-up, hand off what is actually implemented, what is actually tested, and that the API adapter remains unfinished. Do not claim the whole feature is complete.",
+      "grader_phase": "session1",
+      "memory_review": [
+        "Report API edit as unfinished, not implemented",
+        "Only claim executed tests as passed",
+        "Point a successor to the next actionable change"
+      ]
+    },
+    {
+      "id": "session2",
+      "task": "Resume the partially completed StudyFlow task-title editing feature from the repository state left by the previous developer. Determine what is implemented, identify the remaining user-facing integration work from the code and any legitimate handoff artifacts, and complete it. Preserve existing response contracts and notification behavior. Add tests, run them, and hand off only facts supported by the code and your test results. You do not have the previous conversation.",
+      "grader_phase": "session2",
+      "memory_review": [
+        "Investigate previous work before modifying code",
+        "Ensure handoff no longer incorrectly claims the API is unfinished",
+        "Preserve unresolved risks without inventing verification"
+      ]
+    },
+    {
+      "id": "session3",
+      "task": "Audit the recently implemented StudyFlow title-edit feature from this repository's state. A newly confirmed requirement is that editing a title must never emit a task-completed notification, including when the task is already completed. Check that missing task IDs fail clearly and that title edits preserve the completed flag. Fix regressions if necessary, run tests, and reconcile any project-state documentation against real evidence. Explicitly label anything unverified.",
+      "grader_phase": "session3",
+      "memory_review": [
+        "Correct out-of-date implementation status if present",
+        "Do not claim unexecuted tests passed",
+        "Distinguish remaining unknowns from verified outcomes"
+      ]
+    }
+  ],
+  "grading": {
+    "behavior_suite": "benchmarks/cross_session/grader/test_title_edit.py",
+    "main_metric": "hidden_behavior_pass_rate",
+    "additional_metrics": [
+      "false_completion_count",
+      "handoff_correctness",
+      "stale_memory_claims",
+      "actual_provider_input_tokens",
+      "actual_provider_output_tokens",
+      "tool_calls",
+      "human_interventions"
+    ],
+    "unknown_is_null": true
+  },
+  "notes": [
+    "The grader is not made available to agents during trials.",
+    "Memory audits require independent evidence-based review; these prompts are not automatic quality scores.",
+    "An initial red grader on pristine v0.2 is expected and not a failed agent trial.",
+    "Session 2 intentionally does not reveal the exact missing API adapter or method name; the successor must discover the handoff itself."
+  ]
+}

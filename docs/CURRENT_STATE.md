@@ -1,6 +1,6 @@
 # Current State
 
-Last verified: 2026-06-20
+Last reviewed: 2026-10-17 (v0.3 experiment branch; live-agent evaluation not run)
 
 ## Implemented
 
@@ -25,21 +25,43 @@ Last verified: 2026-06-20
 
 ## In Progress
 
-- None.
+- The v0.3 experimental branch now contains a scoped `design.md`, four
+  isolated condition-specific workspace setups, a three-session StudyFlow
+  coding scenario, a generic fresh-process external agent CLI runner,
+  stage-aware independent behavioral grading, and a source-evidence packet
+  for human memory review. Tests cover manifest structure, isolated workspace
+  setup, smoke runner behavior, source inspection, and the expected-red grader.
+- The runner never reports a model success rate from its own smoke tests;
+  records mark provider token usage unknown and memory truth not reviewed.
 
 ## Planned Next
 
-1. Publish the verified v0.2 release.
-2. Repeat the Agent benchmark across additional runs and exposed model versions.
-3. Package the initializer and add guided compaction in v0.3.
+1. Pin agent CLI/model version and sandbox permissions and run a small pilot
+   with all four conditions in genuinely fresh coding-agent sessions.
+2. Independently review memory claims against code, behavior tests, and
+   transcripts; verify which provider usage metrics are exposed.
+3. Repeat trials, preserve and sanitize raw evidence, and publish uncertainty.
+4. Fix the smallest repeatable handoff failure, if the evidence warrants it.
+5. Release v0.3 only after demonstrated improvements or clear negative results.
 
 ## Known Issues
 
 - Provider-measured token usage and resolved Agent model versions were not
   exposed by the benchmark runner.
 - The real Agent benchmark currently has one run per task/strategy pair.
+- v0.3 has an unrun live-agent scenario with a CLI harness, smoke tests,
+  and an evidence packet; no comparable live-agent trial results, token
+  savings, or memory-accuracy scores exist yet.
 
 ## Active Entry Points
+
+- `design.md`: experimental v0.3 design and scope guardrails.
+- `benchmarks/cross_session/README.md`: evaluation protocol and limitations.
+- `benchmarks/cross_session/scenarios.json`: three-session pilot manifest.
+- `benchmarks/cross_session/grader/test_title_edit.py`: independent behavior checks.
+- `benchmarks/cross_session/prepare.py`: fair per-condition workspaces.
+- `benchmarks/cross_session/run_session.py`: fresh-session CLI and offline tests.
+- `benchmarks/cross_session/audit_memory.py`: human-review evidence packets.
 
 - `skill/codex-project-memory/SKILL.md`: reusable workflow.
 - `templates/AGENTS.md`: repository instruction template.
