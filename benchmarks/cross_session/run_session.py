@@ -17,6 +17,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+from benchmarks.cross_session.audit_memory import create_packet
 from benchmarks.cross_session.prepare import CONDITIONS
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -162,6 +163,12 @@ def run_session(workspace: Path, trial_dir: Path, condition: str,
     write_text(run_dir / "grader_stdout.txt", str(grader["stdout"]))
     write_text(run_dir / "grader_stderr.txt", str(grader["stderr"]))
 
+    # Inspect project memory without making a claim about its factual accuracy.
+    audit_packet = create_packet(workspace)
+    (run_dir / "memory_evidence.json").write_text(
+        json.dumps(audit_packet, indent=2) + "\n", encoding="utf-8"
+    )
+
     # Grader success means all required behavior checks passed, not that
     # memory statements are truthful or token usage has been measured.
     record = {
@@ -183,6 +190,8 @@ def run_session(workspace: Path, trial_dir: Path, condition: str,
         "grader_returncode": grader["returncode"],
         "grader_error": grader["error"],
         "memory_review_status": "not_reviewed",
+        "memory_evidence_file": "memory_evidence.json",
+        "potential_stale_api_claims": len(audit_packet["potential_stale_api_claims"]),
         "actual_provider_input_tokens": None,
         "actual_provider_output_tokens": None,
         "tool_calls": None,
