@@ -1,6 +1,6 @@
 # Current State
 
-Last verified: 2026-06-20
+Last reviewed: 2026-10-17 (v0.3 experiment branch; live-agent evaluation not run)
 
 ## Implemented
 
@@ -25,21 +25,37 @@ Last verified: 2026-06-20
 
 ## In Progress
 
-- None.
+- Experimental v0.3 branch defines a narrowly scoped reliable-handoff design
+  (`design.md`), a cross-session evaluation protocol and pilot scenario
+  (`benchmarks/cross_session/`), offline stage-aware behavior grader, and
+  manifest structure tests. Agent outcome measurements are **not yet run**.
 
 ## Planned Next
 
-1. Publish the verified v0.2 release.
-2. Repeat the Agent benchmark across additional runs and exposed model versions.
-3. Package the initializer and add guided compaction in v0.3.
+1. Validate benchmark resources with local unit tests and confirm the hidden
+   grader fails as expected on an unmodified fixture.
+2. Build reproducible per-condition isolated workspaces and a fresh-session
+   orchestration harness; do not leak evaluator tests to agents.
+3. Run repeated live-agent cross-session trials for all four conditions;
+   preserve raw evidence, measured usage if exposed, and failures.
+4. Choose the smallest Skill improvement justified by repeated failures.
+5. Release v0.3 only after verifying the new workflow; handle packaging and
+   guided compaction later if needed.
 
 ## Known Issues
 
 - Provider-measured token usage and resolved Agent model versions were not
   exposed by the benchmark runner.
 - The real Agent benchmark currently has one run per task/strategy pair.
+- v0.3's pilot benchmark is a protocol and offline behavior grader only;
+  no live-agent results, token savings, or comparison outcomes exist yet.
 
 ## Active Entry Points
+
+- `design.md`: experimental v0.3 design and scope guardrails.
+- `benchmarks/cross_session/README.md`: evaluation protocol and limitations.
+- `benchmarks/cross_session/scenarios.json`: three-session pilot manifest.
+- `benchmarks/cross_session/grader/test_title_edit.py`: independent behavior checks.
 
 - `skill/codex-project-memory/SKILL.md`: reusable workflow.
 - `templates/AGENTS.md`: repository instruction template.
